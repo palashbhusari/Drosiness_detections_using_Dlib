@@ -22,13 +22,18 @@ while True:
         landmarks = predictor(gray, face)
         hull_points=[]      # list to append coordinates and fill color
         for n in range(37, 48):
+            if n == 42:
+                continue
             x = landmarks.part(n).x
             y = landmarks.part(n).y
             hull_points.append([x,y]) 
                 # now drawing line for lips
             cv2.line(frame,(landmarks.part(n-1).x,landmarks.part(n-1).y),(x,y),(0,255,0),1)
             cv2.circle(frame, (x, y), 1, (0, 0, 255), -1)
-                
+        cv2.line(frame,(landmarks.part(36).x,landmarks.part(36).y),
+                 (landmarks.part(41).x,landmarks.part(41).y),(0,255,0),1)
+        cv2.line(frame,(landmarks.part(42).x,landmarks.part(42).y),
+                 (landmarks.part(47).x,landmarks.part(47).y),(0,255,0),1)
         pts=np.asarray([hull_points])
         #cv2.fillPoly(frame, pts, color=(0,0,255)) # fil color in the np list hull_pts
     #print("hull = ",pts, type(pts))
