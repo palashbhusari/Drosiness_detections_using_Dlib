@@ -10,6 +10,22 @@ def distance(x,y):
     cv2.circle(frame, (x2, y2), 1, (255, 0, 0), -1) # lower coordinates
     dist = math.sqrt((x2 - x1)**2 + (y2 - y1)**2) # dist bet 2 points
     return int(dist)
+def l_eye():
+    global landmarks
+    global x
+    global y
+    # lup = left eye's upper point  and ldp left eye's lower point
+    lup,ldp=(landmarks.part(37).x,landmarks.part(37).y),(landmarks.part(41).x,landmarks.part(41).y)
+    #print(lup,"  ",llp)        cv2.line(frame,lup,ldp,(0,0,255),1)
+    # calculating distance bet lup and ldp verticle
+    l_vert = distance(lup,ldp)
+    return l_vert
+    
+
+def eye_a_ratio(leye,reye):
+    pass
+    
+    
 
 cap = cv2.VideoCapture(0)
 
@@ -45,15 +61,10 @@ while True:
                  (landmarks.part(47).x,landmarks.part(47).y),(0,255,0),1)
 ######################################################################################
         
-        # lup = left eye's upper point  and ldp left eye's lower point
-        lup,llp=(landmarks.part(37).x,landmarks.part(37).y),(landmarks.part(41).x,landmarks.part(41).y)
-        #print(lup,"  ",llp)
-        cv2.line(frame,lup,llp,(0,0,255),1)
-        # calculating distance bet lup and llp
-        l_ear = distance(lup,llp)
+    leye=l_eye()
     #print(l_ear)
-    cv2.putText(frame,str(l_ear),(0,25), cv2.FONT_HERSHEY_SIMPLEX, 1,(0,0,0),2,cv2.LINE_AA)
-    if l_ear < 6:
+    cv2.putText(frame,str(leye),(0,25), cv2.FONT_HERSHEY_SIMPLEX, 1,(0,0,0),2,cv2.LINE_AA)
+    if leye < 8:
         cv2.putText(frame,"drowsiness alert",(100,250), cv2.FONT_HERSHEY_SIMPLEX, 2,(0,0,255),3,cv2.LINE_AA)
     cv2.imshow("Frame", frame)
 
