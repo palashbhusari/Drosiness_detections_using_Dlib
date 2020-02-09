@@ -13,16 +13,16 @@ def distance(x,y):
 
 def r_eye():
     global landmarks
+    #### verticle line #####
     # rup = right eye's upper point  and rdp right eye's lower point
     rup,rdp=(landmarks.part(43).x,landmarks.part(43).y),(landmarks.part(47).x,landmarks.part(47).y)
     #print(lup,"  ",llp)        cv2.line(frame,lup,ldp,(0,0,255),1)
     # calculating distance bet lup and ldp verticle
     r_vert = distance(rup,rdp)
     return r_vert
+
 def l_eye():
     global landmarks
-    global x
-    global y
     # lup = left eye's upper point  and ldp left eye's lower point
     lup,ldp=(landmarks.part(37).x,landmarks.part(37).y),(landmarks.part(41).x,landmarks.part(41).y)
     #print(lup,"  ",llp)        cv2.line(frame,lup,ldp,(0,0,255),1)
@@ -32,9 +32,14 @@ def l_eye():
 
     
 
-def eye_a_ratio(leye,reye):
-    pass
-    
+def eye_a_ratio(l,r):
+    global landmarks
+    #### horizontalle line #####
+    #rl = right eye left pt and rr right eye right pt
+    rl,rr=(landmarks.part(42).x,landmarks.part(42).y),(landmarks.part(45).x,landmarks.part(45).y)
+    hor = distance(rr,rl)
+    EAR = (l+r)/(2*hor)
+    return EAR
     
 
 cap = cv2.VideoCapture(0)
@@ -72,11 +77,14 @@ while True:
 ######################################################################################
     leye=l_eye()
     reye=r_eye()    
+    EAR = eye_a_ratio(leye,reye)
+    #print(EAR)
     
-    #print(l_ear)
-    cv2.putText(frame,'left: '+str(leye),(0,25), cv2.FONT_HERSHEY_SIMPLEX, 1,(0,0,0),2,cv2.LINE_AA)
-    cv2.putText(frame,'right: '+str(reye),(500,25), cv2.FONT_HERSHEY_SIMPLEX, 1,(0,0,0),2,cv2.LINE_AA)
-    if reye < 8:
+    #cv2.putText(frame,'left: '+str(leye),(0,25), cv2.FONT_HERSHEY_SIMPLEX, 1,(0,0,0),2,cv2.LINE_AA)
+    #cv2.putText(frame,'right: '+str(reye),(500,25), cv2.FONT_HERSHEY_SIMPLEX, 1,(0,0,0),2,cv2.LINE_AA)
+    cv2.putText(frame,'EAR: '+str(round(EAR,2)),(0,25), cv2.FONT_HERSHEY_SIMPLEX, 1,(0,0,0),2,cv2.LINE_AA)
+    
+    if EAR < 0.2:
         cv2.putText(frame,"drowsiness alert",(100,250), cv2.FONT_HERSHEY_SIMPLEX, 2,(0,0,255),3,cv2.LINE_AA)
     cv2.imshow("Frame", frame)
 
